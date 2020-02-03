@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Paramore.Brighter.Extensions.DependencyInjection
@@ -46,6 +46,7 @@ namespace Paramore.Brighter.Extensions.DependencyInjection
                 ? policyBuilder.DefaultPolicy()
                 : policyBuilder.Policies(options.PolicyRegistry);
 
+            //TODO: Need to add async outbox 
             var builder = options.BrighterMessaging == null
                 ? messagingBuilder.NoTaskQueues()
                 : messagingBuilder.TaskQueues(new MessagingConfiguration(options.BrighterMessaging.MessageStore, options.BrighterMessaging.Producer, messageMapperRegistry));
@@ -74,10 +75,10 @@ namespace Paramore.Brighter.Extensions.DependencyInjection
 
     public class BrighterMessaging
     {
-        public IAmAMessageStore<Message> MessageStore { get; }
+        public IAmAnOutbox<Message> MessageStore { get; }
         public IAmAMessageProducer Producer { get; }
 
-        public BrighterMessaging(IAmAMessageStore<Message> messageStore, IAmAMessageProducer producer)
+        public BrighterMessaging(IAmAnOutbox<Message> messageStore, IAmAMessageProducer producer)
         {
             MessageStore = messageStore;
             Producer = producer;
