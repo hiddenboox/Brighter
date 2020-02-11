@@ -23,7 +23,6 @@ THE SOFTWARE. */
 #endregion
 
 using System;
-using Greetings.Adapters.ServiceHost;
 using Greetings.Ports.CommandHandlers;
 using Greetings.Ports.Commands;
 using Greetings.Ports.Mappers;
@@ -33,7 +32,6 @@ using Paramore.Brighter.ServiceActivator;
 using Polly;
 using Polly.Registry;
 using Serilog;
-using TinyIoC;
 
 namespace GreetingsReceiverConsole
 {
