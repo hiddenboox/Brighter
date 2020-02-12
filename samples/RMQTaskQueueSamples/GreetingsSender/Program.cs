@@ -53,7 +53,8 @@ namespace GreetingsSender
 
             serviceCollection.AddBrighter(options =>
             {
-                options.BrighterMessaging = new BrighterMessaging(new InMemoryOutbox(), producer);
+                var outBox = new InMemoryOutbox();
+                options.BrighterMessaging = new BrighterMessaging(outBox,outBox, producer, null);
             }).AutoFromAssemblies();
 
             var serviceProvider = serviceCollection.BuildServiceProvider();
