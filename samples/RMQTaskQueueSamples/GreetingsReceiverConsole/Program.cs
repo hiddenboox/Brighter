@@ -80,8 +80,8 @@ namespace GreetingsReceiverConsole
                     {
                         options.Connections = connections;
                         options.ChannelFactory = new ChannelFactory(rmqMessageConsumerFactory);
-                        options.BrighterMessaging = new BrighterMessaging(new InMemoryOutbox(), 
-                            new RmqMessageProducer(rmqConnection));
+                        var outBox = new InMemoryOutbox();
+                        options.BrighterMessaging = new BrighterMessaging(outBox, outBox, new RmqMessageProducer(rmqConnection), null);
                     }).AutoFromAssemblies();
 
                     

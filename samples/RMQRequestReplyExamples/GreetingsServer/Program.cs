@@ -100,7 +100,7 @@ namespace GreetingsServer
             var commandProcessor = CommandProcessorBuilder.With()
                 .Handlers(new HandlerConfiguration(subscriberRegistry, handlerFactory))
                 .Policies(policyRegistry)
-                .TaskQueues(new MessagingConfiguration(outbox, producer, messageMapperRegistry))
+                .TaskQueues(new MessagingConfiguration(outbox, outbox, producer, null, messageMapperRegistry))
                 .RequestContextFactory(new InMemoryRequestContextFactory())
                 .Build();
 
