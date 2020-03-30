@@ -46,12 +46,27 @@ namespace Paramore.Brighter.Extensions.DependencyInjection
                 ? policyBuilder.DefaultPolicy()
                 : policyBuilder.Policies(options.PolicyRegistry);
 
-            //TODO: Need to add async outbox 
-            var builder = options.BrighterMessaging == null
-                ? messagingBuilder.NoTaskQueues()
-                : messagingBuilder.TaskQueues(new MessagingConfiguration(options.BrighterMessaging.OutBox, options.BrighterMessaging.AsyncOutBox, options.BrighterMessaging.Producer, options.BrighterMessaging.AsyncProducer, messageMapperRegistry));
+            
+            INeedARequestContext taskQueuesBuilder;
+            if (options.ChannelFactory is null)
+            {
+                //TODO: Need to add async outbox 
+                
+                taskQueuesBuilder = options.BrighterMessaging == null
+                    ? messagingBuilder.NoTaskQueues()
+                    : messagingBuilder.TaskQueues(new MessagingConfiguration(options.BrighterMessaging.OutBox,
+                        options.BrighterMessaging.AsyncOutBox, options.BrighterMessaging.Producer,
+                        options.BrighterMessaging.AsyncProducer, messageMapperRegistry));
+            }
+            else
+            {
+                taskQueuesBuilder = options.BrighterMessaging == null
+                    ? messagingBuilder.NoTaskQueues()
+                    : messagingBuilder.RequestReplyQueues(new MessagingConfiguration(options.BrighterMessaging.OutBox,
+                        options.BrighterMessaging.Producer, messageMapperRegistry, responseChannelFactory: options.ChannelFactory));
+            }
 
-            var commandProcessor = builder
+            var commandProcessor = taskQueuesBuilder
                 .RequestContextFactory(options.RequestContextFactory)
                 .Build();
 
